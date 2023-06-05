@@ -53,5 +53,17 @@
 
 	<ItemGroup>
 	  <MauiImage Include="Resources\Images\dotnet_bot.svg" />
+	  <MauiImage Include="Resources\Images\Icons\ic_lol.svg" />
+	  <MauiImage Include="Resources\Images\Icons\ic_sword.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Resources\Images\Icons\" />
+	  <None Remove="Resources\Images\Icons\ic_sword.png" />
+	  <None Remove="Resources\Images\Icons\ic_lol.svg" />
+	  <None Remove="Pages\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Resources\Images\Icons\" />
+	  <Folder Include="Pages\" />
 	</ItemGroup>
 </Project>
