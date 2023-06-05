@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="View.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:View"
+    xmlns:pages="clr-namespace:View.Pages"
+    Shell.FlyoutBehavior="Disabled">
+
+    <TabBar>
+        <ShellContent
+            Icon="ic_lol"
+            Title="Home"
+            ContentTemplate="{DataTemplate pages:HomePage}"
+            Route="HomePage" />
+
+        <ShellContent
+            Icon="ic_sword"
+            Title="Champions"
+            ContentTemplate="{DataTemplate pages:ChampionsPage}"
+            Route="ChampionsPage" />
+    </TabBar>
+</Shell>
+
