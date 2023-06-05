@@ -52,18 +52,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiImage Include="Resources\Images\dotnet_bot.svg" />
 	  <MauiImage Include="Resources\Images\Icons\ic_lol.svg" />
 	  <MauiImage Include="Resources\Images\Icons\ic_sword.png" />
+	  <MauiImage Include="Resources\Images\Core\lol_logo.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="Resources\Images\Icons\" />
 	  <None Remove="Resources\Images\Icons\ic_sword.png" />
 	  <None Remove="Resources\Images\Icons\ic_lol.svg" />
 	  <None Remove="Pages\" />
+	  <None Remove="Resources\Images\Core\" />
+	  <None Remove="Resources\Images\Core\lol_logo.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Resources\Images\Icons\" />
 	  <Folder Include="Pages\" />
+	  <Folder Include="Resources\Images\Core\" />
 	</ItemGroup>
 </Project>
