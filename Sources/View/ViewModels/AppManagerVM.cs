@@ -46,7 +46,7 @@ namespace View.ViewModels
         private async Task NavToSelectChampion(ChampionVM selectedChampion)
         {
             if (Navigation is null) return;
-            await Navigation.PushAsync(new HomePage());
+            await Navigation.PushAsync(new ChampionDetailPage(this, selectedChampion));
         }
     }
 }

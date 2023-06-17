@@ -58,13 +58,6 @@
 	  <MauiImage Include="Resources\Images\Core\lol_logo.png" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Remove="Resources\Images\Icons\ic_sword.png" />
-	  <None Remove="Resources\Images\Icons\ic_lol.svg" />
-	  <None Remove="Resources\Images\Core\lol_logo.png" />
-	  <None Remove="Converters\" />
-	  <None Remove="ViewModels\" />
-	</ItemGroup>
-	<ItemGroup>
 	  <ProjectReference Include="..\ViewModel\ViewModel.csproj" />
 	  <ProjectReference Include="..\StubLib\StubLib.csproj" />
 	</ItemGroup>

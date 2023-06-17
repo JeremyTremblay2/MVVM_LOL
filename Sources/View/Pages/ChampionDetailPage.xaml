@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="View.Pages.ChampionDetailPage"
+             xmlns:conv="clr-namespace:View.Converters"
+             xmlns:view="clr-namespace:View;assembly=View"
+             xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
+             x:Name="ThisChampionPage"
+             Title="{Binding Name}">
+
+    <ContentPage.Resources>
+        <conv:Base64ToImageSourceConverter x:Key="Base64Converter"/>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Supprimer" 
+                     Command="{Binding AppManagerVM.NavToAllChampionsAfterDeletingCommand}"
+                     CommandParameter="{Binding .}" />
+        <ToolbarItem Text="Modifier" 
+                     Command="{Binding Source={x:Reference ThisChampionPage}, Path=AppManagerVM.NavToUpdateChampionCommand}"
+                     CommandParameter="{Binding .}" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <Image Source="{Binding Path=Image, Converter={StaticResource Base64Converter}}"/>
+
+            <VerticalStackLayout Margin="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Text="{Binding Name}"
+                           FontSize="Title"
+                           VerticalOptions="Start"
+                           VerticalTextAlignment="Start"
+                           Grid.Row="0"/>
+                    <Image Source="{Binding Path=Icon, Converter={StaticResource Base64Converter}}"
+                           HeightRequest="36"
+                           WidthRequest="36"
+                           HorizontalOptions="End"
+                           Grid.Row="1"/>
+                </Grid>
+
+                <Label Text="{Binding Bio}"
+                       Margin="0, 20, 0, 0"/>
+
+                <Label Text="Characteristics"
+                       Padding="0, 30, 0, 0"
+                       FontSize="Title"/>
+
+                <CollectionView ItemsSource="{Binding CharacteristicsVM}" VerticalScrollBarVisibility="Never">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="3"
+                                         HorizontalItemSpacing="12"
+                                         VerticalItemSpacing="12"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeThickness="1">
+                                <VerticalStackLayout Padding="10">
+                                    <Label Text="{Binding Key}"
+                                        HorizontalOptions="Center"
+                                        HorizontalTextAlignment="Center"
+                                        LineBreakMode="WordWrap"
+                                        VerticalOptions="CenterAndExpand"
+                                        FontSize="Default"/>
+                                
+                                    <Label Text="{Binding Value}"
+                                           HorizontalTextAlignment="Center"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Label Text="Skills"
+                       Padding="0, 30, 0, 0"
+                       FontSize="Title"/>
+                <CollectionView ItemsSource="{Binding SkillsVM}" VerticalScrollBarVisibility="Never">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout Padding="0, 10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="{Binding Name}"
+                                           FontAttributes="Bold"
+                                           Grid.Column="0"
+                                           FontSize="Subtitle"/>
+                                    <Label Text="{Binding Type}"
+                                           Grid.Column="1"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Start"/>
+
+                                </Grid>
+                                <Label Text="{Binding Description}"/>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
