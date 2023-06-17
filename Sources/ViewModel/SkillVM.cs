@@ -6,10 +6,10 @@ namespace ViewModel
 {
 	public class SkillVM : BaseVM
 	{
-        private Skill Model
+        public Skill Model
         {
             get => model;
-            set
+            private set
             {
                 if (value.Equals(model)) return;
                 model = value;
