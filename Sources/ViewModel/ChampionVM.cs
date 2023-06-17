@@ -3,10 +3,11 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Model;
 using Utils;
+using VMToolkit;
 
 namespace ViewModel;
 
-public class ChampionVM : INotifyPropertyChanged
+public class ChampionVM : BaseVM
 {
     private Champion Model
     {
@@ -92,8 +93,6 @@ public class ChampionVM : INotifyPropertyChanged
 
     public ObservableDictionary<string, int> characteristics;
 
-    public event PropertyChangedEventHandler PropertyChanged;
-
     public ChampionVM(Champion model)
     {
         Model = model ?? throw new ArgumentNullException(nameof(model), "The parameter given cannot be null.");
@@ -108,9 +107,6 @@ public class ChampionVM : INotifyPropertyChanged
     public ChampionVM() : this(new Champion("", ChampionClass.Tank))
     {
     }
-
-    public void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     public void AddCharacteristic(Tuple<string, int> value)
     {
