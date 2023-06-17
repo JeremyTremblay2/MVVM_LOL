@@ -11,21 +11,21 @@ namespace View.ViewModels
 
         public ChampionManagerVM ChampionManagerVM => (Application.Current as App)!.ChampionManagerVM;
 
-        public ICommand NavToAddChampionCommand { get; private set; }
-        public ICommand NavToUpdateChampionCommand { get; private set; }
-        public ICommand NavToSelectChampionCommand { get; private set; }
+        public ICommand NavigateToAddChampionCommand { get; private set; }
+        public ICommand NavigateToUpdateChampionCommand { get; private set; }
+        public ICommand NavigateToSelectChampionCommand { get; private set; }
 
         public AppManagerVM()
 		{
-            NavToAddChampionCommand = new Command(
+            NavigateToAddChampionCommand = new Command(
                 execute: async () => await NavToAddChampion(),
                 canExecute: () => ChampionManagerVM is not null
             );
-            NavToUpdateChampionCommand = new Command<ChampionVM>(
+            NavigateToUpdateChampionCommand = new Command<ChampionVM>(
                 execute: async (championToUpdate) => await NavToUpdateChampion(championToUpdate),
                 canExecute: championToUpdate => ChampionManagerVM is not null && championToUpdate is not null
             );
-            NavToSelectChampionCommand = new Command<ChampionVM>(
+            NavigateToSelectChampionCommand = new Command<ChampionVM>(
                 execute: async (selectedChampion) => await NavToSelectChampion(selectedChampion),
                 canExecute: selectedChampion => ChampionManagerVM is not null && selectedChampion is not null
             );
