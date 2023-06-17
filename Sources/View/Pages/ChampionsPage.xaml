@@ -2,11 +2,104 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="View.Pages.ChampionsPage"
+             xmlns:conv="clr-namespace:View.Converters"
+             xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
+             xmlns:view="clr-namespace:View;assembly=View"
              Title="Champions">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <ContentPage.Resources>
+        <conv:Base64ToImageSourceConverter x:Key="Base64Converter"/>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Ajouter" 
+                     Command="{Binding NavToAddChampionCommand}"/>
+    </ContentPage.ToolbarItems>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+    
+        <ScrollView Grid.Row="0">
+            <StackLayout Orientation="Vertical">
+                <Label Text="Chercher par &lt;" />
+                <CollectionView x:Name="Champions"
+                                ItemsSource="{Binding ChampionManagerVM.ObservableChampionsVM}"
+                                SelectionMode="Single">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ChampionVM">
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem Text="Supprimer"
+                                                   Command="{Binding Source={x:RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=ChampionManagerVM.DeleteChampionCommand}"
+                                                   CommandParameter="{Binding .}"
+                                                   BackgroundColor="Red" />
+                                        <SwipeItem Text="Modifier"
+                                                   Command="{Binding Source={x:RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=EditChampionCommand}"
+                                                   CommandParameter="{Binding .}"
+                                                   BackgroundColor="DarkGrey" />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <SwipeView.Content>
+                                    <VerticalStackLayout>
+                                        <HorizontalStackLayout>
+                                            <Border Stroke="Black"
+                                                    StrokeThickness="2"
+                                                    Margin="12, 8">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="10" />
+                                                </Border.StrokeShape>
+                                                <Border.GestureRecognizers>
+                                                    <TapGestureRecognizer 
+                                                        Command="{Binding Source={x:RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=NavToSelectChampionCommand}" 
+                                                        CommandParameter="{Binding .}" />
+                                                </Border.GestureRecognizers>
+                                                <Image Source="{Binding Icon, Converter={StaticResource Base64Converter}}"
+                                                    WidthRequest="58"
+                                                    HeightRequest="58">
+                                                </Image>
+                                            </Border>
+                                            <StackLayout Orientation="Vertical"
+                                                         VerticalOptions="Center">
+                                                <Label Text="{Binding Name}"
+                                                       Margin="0, 0, 0, 4"
+                                                       HorizontalOptions="Start"
+                                                       FontAttributes="Bold"
+                                                       FontSize="Subtitle"/>
+                                                <Label Text="{Binding Class}"
+                                                       HorizontalOptions="Start"
+                                                       FontAttributes="Italic"
+                                                       FontSize="Body"/>
+                                            </StackLayout>
+                                        </HorizontalStackLayout>
+                                        <Line X1="40" Y1="0" X2="1000" Y2="0" Stroke="LightGray" />
+                                    </VerticalStackLayout>
+                                </SwipeView.Content>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </ScrollView>
+
+        <StackLayout Orientation="Horizontal"
+                     Grid.Row="1"
+                     VerticalOptions="End"
+                     HorizontalOptions="Center">
+            <Button Text="&lt;"
+                    Command="{Binding ChampionManagerVM.PreviousPageCommand}" />
+
+            <StackLayout Orientation="Horizontal"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="CenterAndExpand"
+                            Margin="8">
+                <Label Text="{Binding ChampionManagerVM.Index}" />
+                <Label Text=" / " />
+                <Label Text="{Binding ChampionManagerVM.NumberOfPages}" />
+            </StackLayout>
+                
+            <Button Text="&gt;" Command="{Binding ChampionManagerVM.NextPageCommand}" />
+        </StackLayout>
+    </Grid>
 </ContentPage>
