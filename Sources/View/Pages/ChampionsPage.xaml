@@ -10,7 +10,7 @@
         <conv:Base64ToImageSourceConverter x:Key="Base64Converter"/>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Ajouter" 
+        <ToolbarItem Text="Add" 
                      Command="{Binding NavToAddChampionCommand}"/>
     </ContentPage.ToolbarItems>
 
@@ -22,21 +22,23 @@
     
         <ScrollView Grid.Row="0">
             <StackLayout Orientation="Vertical">
-                <Label Text="Chercher par &lt;" />
+                <Label Text="Find by &lt;" />
                 <CollectionView x:Name="Champions"
                                 ItemsSource="{Binding ChampionManagerVM.ObservableChampionsVM}"
-                                SelectionMode="Single">
+                                SelectionMode="Single"
+                                SelectionChangedCommand="{Binding Source={RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=NavToSelectChampionCommand}"
+                                SelectionChangedCommandParameter="{Binding .}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="vm:ChampionVM">
                             <SwipeView>
                                 <SwipeView.RightItems>
                                     <SwipeItems>
-                                        <SwipeItem Text="Supprimer"
+                                        <SwipeItem Text="Delete"
                                                    Command="{Binding Source={x:RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=ChampionManagerVM.DeleteChampionCommand}"
                                                    CommandParameter="{Binding .}"
                                                    BackgroundColor="Red" />
-                                        <SwipeItem Text="Modifier"
-                                                   Command="{Binding Source={x:RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=EditChampionCommand}"
+                                        <SwipeItem Text="Edit"
+                                                   Command="{Binding Source={x:RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=NavToEditChampionCommand}"
                                                    CommandParameter="{Binding .}"
                                                    BackgroundColor="DarkGrey" />
                                     </SwipeItems>
@@ -44,17 +46,17 @@
                                 <SwipeView.Content>
                                     <VerticalStackLayout>
                                         <HorizontalStackLayout>
+                                            <HorizontalStackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer 
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=NavToSelectChampionCommand}" 
+                                                        CommandParameter="{Binding .}" />
+                                            </HorizontalStackLayout.GestureRecognizers>
                                             <Border Stroke="Black"
                                                     StrokeThickness="2"
                                                     Margin="12, 8">
                                                 <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="10" />
                                                 </Border.StrokeShape>
-                                                <Border.GestureRecognizers>
-                                                    <TapGestureRecognizer 
-                                                        Command="{Binding Source={x:RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=NavToSelectChampionCommand}" 
-                                                        CommandParameter="{Binding .}" />
-                                                </Border.GestureRecognizers>
                                                 <Image Source="{Binding Icon, Converter={StaticResource Base64Converter}}"
                                                     WidthRequest="58"
                                                     HeightRequest="58">
