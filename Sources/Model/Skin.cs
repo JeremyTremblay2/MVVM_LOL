@@ -8,7 +8,7 @@ namespace Model
 		public string Name
 		{
 			get => name;
-			private init
+			set
 			{
 				if(string.IsNullOrWhiteSpace(value))
 				{
@@ -17,7 +17,7 @@ namespace Model
 				name = value;
 			}
 		}
-		private readonly string name = null!;
+		private string name = null!;
 
 		public string Description
 		{

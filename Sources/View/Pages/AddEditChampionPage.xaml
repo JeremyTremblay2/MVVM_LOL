@@ -21,10 +21,10 @@
                      CommandParameter="{Binding .}" />
     </ContentPage.ToolbarItems>
 
-    <ScrollView>
-        <VerticalStackLayout>
+    <Grid RowDefinitions="*, Auto">
+        <ScrollView>
             <VerticalStackLayout BindingContext="{Binding ChampionVM}"
-                                 Margin="10">
+                                 Margin="10, 10, 10, 20">
                 <Grid ColumnSpacing="10" RowSpacing="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
@@ -94,8 +94,10 @@
                                         VerticalScrollBarVisibility="Never">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid ColumnDefinitions="auto, *, auto" Margin="0, 5">
-                                        <Button Text="x"
+                                    <Grid ColumnDefinitions="auto, *, auto" Margin="0, 2">
+                                        <ImageButton Source="trash.png"
+                                                WidthRequest="20"
+                                                HeightRequest="20"
                                                 Grid.Column="0"
                                                 Margin="0, 0, 10, 0"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EditableChampionVM}}, Path=RemoveCharacteristicCommand}"
@@ -115,8 +117,10 @@
                                    x:Name="CharacteristicLabel"/>
                             <Entry Placeholder="Value"
                                    Grid.Column="1"
+                                   Margin="10, 0, 10, 0"
                                    x:Name="CharacteristicValue"/>
                             <Button Text="+"
+                                    CornerRadius="25"
                                     Grid.Column="2"
                                     Command="{Binding UpsertCharacteristicCommand}">
                                 <Button.CommandParameter>
@@ -140,7 +144,9 @@
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <HorizontalStackLayout>
-                                        <Button Text="x"
+                                        <ImageButton Source="trash.png"
+                                                WidthRequest="20"
+                                                HeightRequest="20"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EditableChampionVM}}, Path=RemoveSkillCommand}"
                                                 CommandParameter="{Binding .}" />
 
@@ -173,14 +179,24 @@
                 </Grid>
 
             </VerticalStackLayout>
-            <HorizontalStackLayout>
-                <Button Text="Cancel" 
-                        Command="{Binding AppManagerVM.NavigateBackAfterCancelingChampionEditCommand}"
-                        CommandParameter="{Binding .}" />
-                <Button Text="Save" 
-                        Command="{Binding Path=AppManagerVM.NavigateBackAfterUpsertingChampionCommand}"
-                        CommandParameter="{Binding ChampionVM}" />
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+
+        <Grid ColumnDefinitions="*, *"
+              BackgroundColor="#00FFFFFF"
+              Grid.Row="1"
+              Margin="10, 0, 10, 10">
+            <Button Text="Cancel" 
+                    Command="{Binding AppManagerVM.NavigateBackAfterCancelingChampionEditCommand}"
+                    CommandParameter="{Binding .}"
+                    Grid.Column="0"
+                    BackgroundColor="Red"
+                    Margin="10, 0, 20, 0"/>
+            <Button Text="Save" 
+                    Command="{Binding Path=AppManagerVM.NavigateBackAfterUpsertingChampionCommand}"
+                    CommandParameter="{Binding ChampionVM}"
+                    Grid.Column="1"
+                    BackgroundColor="Green"
+                    Margin="20, 0, 10, 0"/>
+        </Grid>
+    </Grid>
 </ContentPage>
