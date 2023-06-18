@@ -52,7 +52,7 @@
                            Grid.Row="1"
                            Grid.Column="0"
                            VerticalTextAlignment="Center"/>
-                    <Image Source="{Binding ChampionVM.Icon, Converter={StaticResource Base64Converter}}"
+                    <ImageButton Source="{Binding ChampionVM.Icon, Converter={StaticResource Base64Converter}}"
                            Grid.Row="1"
                            WidthRequest="60"
                            HeightRequest="60"
@@ -62,7 +62,7 @@
                            Grid.Row="2"
                            Grid.Column="0"
                            VerticalTextAlignment="Center"/>
-                    <Image Source="{Binding ChampionVM.Image, Converter={StaticResource Base64Converter}}"
+                    <ImageButton Source="{Binding ChampionVM.Image, Converter={StaticResource Base64Converter}}"
                            Grid.Row="2"
                            Grid.Column="1"/>
 
@@ -83,7 +83,7 @@
                             Grid.Column="1"
                             SelectedItem="{Binding ChampionVM.Class, Mode=TwoWay}" />
 
-
+                    <!-- Characteristics-->
                     <Label Text="Characteristics"
                            Grid.Row="5"
                            Grid.Column="0"
@@ -94,7 +94,7 @@
                                         VerticalScrollBarVisibility="Never">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid ColumnDefinitions="auto, *, auto" Margin="0, 2">
+                                    <Grid ColumnDefinitions="auto, *, auto" Margin="0">
                                         <ImageButton Source="trash.png"
                                                 WidthRequest="20"
                                                 HeightRequest="20"
@@ -112,7 +112,11 @@
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-                        <Grid ColumnDefinitions="*, Auto, Auto">
+
+                        <!-- Add Characteristic button-->
+                        <Grid ColumnDefinitions="*, Auto, Auto"
+                              VerticalOptions="Center"
+                              Margin="0, 10, 0, 20">
                             <Entry Placeholder="Name"
                                    x:Name="CharacteristicLabel"/>
                             <Entry Placeholder="Value"
@@ -133,6 +137,7 @@
                         </Grid>
                     </VerticalStackLayout>
 
+                    <!-- Skills-->
                     <Label Text="Skills"
                            Grid.Row="6"
                            Grid.Column="0"
@@ -143,37 +148,37 @@
                                         VerticalScrollBarVisibility="Never">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <HorizontalStackLayout>
+                                    <Grid ColumnDefinitions="Auto, *" Margin="0, 10, 0, 0">
                                         <ImageButton Source="trash.png"
                                                 WidthRequest="20"
                                                 HeightRequest="20"
+                                                VerticalOptions="Center"
+                                                Margin="0, 0, 10, 0"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EditableChampionVM}}, Path=RemoveSkillCommand}"
                                                 CommandParameter="{Binding .}" />
-
-                                        <VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="100" />
+                                                    <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
 
-                                                <Label Text="{Binding Name}"
-                                                        FontAttributes="Bold"
-                                                        Grid.Column="0"
-                                                        FontSize="Subtitle"/>
-                                                <Label Text="{Binding Type}"
+                                                <Entry Text="{Binding Name}"
+                                                       Grid.Column="0"
+                                                       FontSize="Subtitle"/>
+                                                <Picker ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:EditableChampionVM}}, Path=SkillTypes}"
+                                                        HorizontalOptions="End"
                                                         Grid.Column="1"
-                                                        VerticalOptions="Center"
-                                                        HorizontalOptions="Start"/>
+                                                        SelectedItem="{Binding Class, Mode=TwoWay}" />
                                             </Grid>
-                                            <Label Text="{Binding Description}"
-                                                   LineBreakMode="WordWrap"/>
+                                            <Editor Text="{Binding Description}"/>
                                         </VerticalStackLayout>
-                                    </HorizontalStackLayout>
+                                    </Grid>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
                         <Button Text="Add Skill"
+                                Margin="0, 10, 0, 0"
                                 Command="{Binding AddSkillCommand}"/>
                     </VerticalStackLayout>
                 </Grid>
