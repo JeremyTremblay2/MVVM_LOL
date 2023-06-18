@@ -48,6 +48,7 @@ namespace ViewModel
                 execute: UpsertCharacteristic,
                 canExecute: tuple =>
                     ChampionVM is not null && tuple is not null && !string.IsNullOrWhiteSpace(tuple.Item1)
+                    && !ChampionVM.CharacteristicsVM.ContainsKey(tuple.Item1)
             );
 
             RemoveCharacteristicCommand = new Command<string>(
@@ -79,10 +80,16 @@ namespace ViewModel
         }
 
         private void UpsertCharacteristic(Tuple<string, int> value)
-            => ChampionVM.UpsertCharacteristic(value);
+        {
+            ChampionVM.UpsertCharacteristic(value);
+            (UpsertCharacteristicCommand as Command).ChangeCanExecute();
+        }
 
         private void RemoveCharacteristic(string key)
-            => ChampionVM.RemoveCharacteristic(key);
+        {
+            ChampionVM.RemoveCharacteristic(key);
+            (UpsertCharacteristicCommand as Command).ChangeCanExecute();
+        }
 
         private void UpsertIcon(byte[] image)
             => ChampionVM.Icon = Convert.ToBase64String(image);

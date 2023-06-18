@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using Model;
 using Utils;
 using VMToolkit;
-using static Java.Util.Jar.Attributes;
 
 namespace ViewModel;
 
