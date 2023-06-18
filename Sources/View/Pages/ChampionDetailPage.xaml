@@ -13,11 +13,11 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Supprimer" 
+        <ToolbarItem Text="Delete" 
                      Command="{Binding AppManagerVM.NavToAllChampionsAfterDeletingCommand}"
                      CommandParameter="{Binding .}" />
-        <ToolbarItem Text="Modifier" 
-                     Command="{Binding Source={x:Reference ThisChampionPage}, Path=AppManagerVM.NavToUpdateChampionCommand}"
+        <ToolbarItem Text="Edit" 
+                     Command="{Binding Source={x:Reference ThisChampionPage}, Path=AppManagerVM.NavigateToUpsertChampionCommand}"
                      CommandParameter="{Binding .}" />
     </ContentPage.ToolbarItems>
 
