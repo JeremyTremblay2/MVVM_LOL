@@ -5,7 +5,7 @@
              xmlns:conv="clr-namespace:View.Converters"
              xmlns:view="clr-namespace:View;assembly=View"
              xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
-             x:Name="ThisChampionPage"
+             x:Name="root"
              Title="{Binding Name}">
 
     <ContentPage.Resources>
@@ -17,7 +17,7 @@
                      Command="{Binding AppManagerVM.NavToAllChampionsAfterDeletingCommand}"
                      CommandParameter="{Binding .}" />
         <ToolbarItem Text="Edit" 
-                     Command="{Binding Source={x:Reference ThisChampionPage}, Path=AppManagerVM.NavigateToUpsertChampionCommand}"
+                     Command="{Binding Source={x:Reference root}, Path=AppManagerVM.NavigateToUpsertChampionCommand}"
                      CommandParameter="{Binding .}" />
     </ContentPage.ToolbarItems>
 

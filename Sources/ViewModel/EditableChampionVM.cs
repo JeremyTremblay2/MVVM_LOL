@@ -24,8 +24,21 @@ namespace ViewModel
         }
         private ChampionVM championVM;
 
+        public SkillVM EditedSkill
+        {
+            get => editedSkill;
+            private set
+            {
+                if (editedSkill is not null && editedSkill.Equals(value)) return;
+                editedSkill = value;
+                (UpsertSkillCommand as Command)?.ChangeCanExecute();
+            }
+        }
+        private SkillVM editedSkill;
+
         public ICommand UpsertCharacteristicCommand { get; private set; }
         public ICommand RemoveCharacteristicCommand { get; private set; }
+        public ICommand AddEditSkillCommand { get; private set; }
         public ICommand UpsertSkillCommand { get; private set; }
         public ICommand RemoveSkillCommand { get; private set; }
         public ICommand UpsertIconCommand { get; private set; }
@@ -67,11 +80,13 @@ namespace ViewModel
                 canExecute: image => ChampionVM is not null && image.Any()
             );
 
-            UpsertSkillCommand = new Command<SkillVM>(
-                execute: UpsertSkill,
+            AddEditSkillCommand = new Command<string?>(
+                execute: AddEditSkill,
                 canExecute: skill =>
-                    ChampionVM is not null && skill is not null && skill.Type is not null && !string.IsNullOrWhiteSpace(skill.Name)
+                    ChampionVM is not null
             );
+
+            UpsertSkillCommand = new Command(UpsertSkill);
 
             RemoveSkillCommand = new Command<SkillVM>(
                 execute: DeleteSkill,
@@ -97,8 +112,15 @@ namespace ViewModel
         private void UpsertImage(byte[] image)
             => ChampionVM.Image = Convert.ToBase64String(image);
 
-        private void UpsertSkill(SkillVM skill)
-            => ChampionVM.UpsertSkill(skill);
+        private void AddEditSkill(string skillName)
+        {
+            var skillVM = ChampionVM.SkillsVM.FirstOrDefault(s => s.Name == skillName);
+            EditedSkill = skillVM == null ? new SkillVM(new Skill(skillName, SkillType.Unknown))
+                : new SkillVM(new Skill(skillVM.Model.Name, skillVM.Model.Type, skillVM.Model.Description));
+        }
+
+        private void UpsertSkill()
+            => ChampionVM.UpsertSkill(EditedSkill);
 
         private void DeleteSkill(SkillVM skill)
             => ChampionVM.RemoveSkill(skill);

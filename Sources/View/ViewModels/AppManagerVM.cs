@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using View.Pages;
 using ViewModel;
+using CommunityToolkit.Maui.Views;
 
 namespace View.ViewModels
 {
@@ -12,9 +13,12 @@ namespace View.ViewModels
         public ChampionManagerVM ChampionManagerVM => (Application.Current as App)!.ChampionManagerVM;
 
         public ICommand NavigateToUpsertChampionCommand { get; private set; }
+        public ICommand NavigateToAddSkillCommand { get; private set; }
         public ICommand NavigateToSelectChampionCommand { get; private set; }
         public ICommand NavigateBackAfterUpsertingChampionCommand { get; private set; }
         public ICommand NavigateBackAfterCancelingChampionEditCommand { get; private set; }
+        public ICommand NavigateBackAfterUpsertingSkillCommand { get; private set; }
+        public ICommand NavigateBackAfterCancelingSkillEditCommand { get; private set; }
 
         public AppManagerVM()
 		{
@@ -28,11 +32,23 @@ namespace View.ViewModels
             );
             NavigateBackAfterUpsertingChampionCommand = new Command<EditableChampionVM>(
                 execute: NavigateBackAfterUpsertingChampion,
-                canExecute: championFormVM => ChampionManagerVM is not null && championFormVM is not null
+                canExecute: editedChampion => ChampionManagerVM is not null && editedChampion is not null
             );
 
             NavigateBackAfterCancelingChampionEditCommand = new Command(NavigateBackAfterCancelingChampionEdit);
 
+            NavigateBackAfterUpsertingSkillCommand = new Command<EditableChampionVM>(
+                execute: NavigateBackAfterUpsertingSkill,
+                canExecute: editedChampion => ChampionManagerVM is not null && editedChampion is not null && editedChampion.EditedSkill is not null
+                            && !string.IsNullOrEmpty(editedChampion.EditedSkill.Name)
+            );
+
+            NavigateBackAfterCancelingSkillEditCommand = new Command(NavigateBackAfterCancelingSkillEdit);
+
+            NavigateToAddSkillCommand = new Command<EditableChampionVM>(
+                execute: async (editedChampion) => await NavigateToAddSkill(editedChampion),
+                canExecute: editedChampion => ChampionManagerVM is not null && editedChampion is not null
+            );
         }
 
         private async Task NavigateToUpsertChampion(ChampionVM champion)
@@ -54,6 +70,36 @@ namespace View.ViewModels
         }
 
         private void NavigateBackAfterCancelingChampionEdit()
+        {
+            if (Navigation is null) return;
+            Navigation.PopModalAsync();
+        }
+
+        private async Task NavigateToAddSkill(EditableChampionVM editedChampion)
+        {
+            string result =
+                await (Application.Current as App)!.MainPage!
+                    .DisplayPromptAsync("New Skill", "Choose a name for your skill", cancel: "Cancel", accept: "Select", maxLength: 255, initialValue: "");
+
+            if (result == null) return;
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                await (Application.Current as App)!.MainPage!
+                    .DisplayAlert("Error", "You must choose a name not empty for your skill.", "OK");
+                return;
+            }
+
+            editedChampion.AddEditSkillCommand.Execute(result);
+            await Navigation.PushModalAsync(new AddEditSkillPage(this, editedChampion));
+        }
+
+        private void NavigateBackAfterUpsertingSkill(EditableChampionVM editedChampion)
+        {
+            editedChampion.UpsertSkillCommand.Execute(null);
+            Navigation.PopModalAsync();
+        }
+
+        private void NavigateBackAfterCancelingSkillEdit()
         {
             if (Navigation is null) return;
             Navigation.PopModalAsync();

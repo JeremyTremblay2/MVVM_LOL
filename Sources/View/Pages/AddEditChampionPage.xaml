@@ -5,7 +5,8 @@
              xmlns:conv="clr-namespace:View.Converters"
              xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
              xmlns:view="clr-namespace:View;assembly=View"
-             Title="Edit Champion">
+             Title="Edit Champion"
+             x:Name="root">
 
     <ContentPage.Resources>
         <conv:Base64ToImageSourceConverter x:Key="Base64Converter"/>
@@ -179,10 +180,10 @@
                         </CollectionView>
                         <Button Text="Add Skill"
                                 Margin="0, 10, 0, 0"
-                                Command="{Binding AddSkillCommand}"/>
+                                Command="{Binding Source={x:Reference root}, Path=AppManagerVM.NavigateToAddSkillCommand}"
+                                CommandParameter="{Binding .}"/>
                     </VerticalStackLayout>
                 </Grid>
-
             </VerticalStackLayout>
         </ScrollView>
 

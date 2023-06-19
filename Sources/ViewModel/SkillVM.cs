@@ -61,6 +61,10 @@ namespace ViewModel
         {
             Model = model ?? throw new ArgumentNullException(nameof(model), "The given parameter cannot be null.");
         }
-	}
+
+        public SkillVM() : this(new Skill("Skill",SkillType.Unknown))
+        {
+        }
+    }
 }
 
