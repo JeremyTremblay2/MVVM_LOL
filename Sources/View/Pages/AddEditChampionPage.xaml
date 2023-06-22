@@ -45,7 +45,7 @@
                            Grid.Row="0"
                            Grid.Column="0"
                            VerticalTextAlignment="Center"/>
-                    <Entry Text="{Binding ChampionVM.Name}"
+                    <Label Text="{Binding ChampionVM.Name}"
                            Grid.Row="0"
                            Grid.Column="1"/>
 
@@ -107,7 +107,9 @@
                                                Grid.Column="1"
                                                Margin="0, 0, 10, 0"
                                                VerticalOptions="Center"/>
-                                        <Entry Text="{Binding Value, Mode=TwoWay}"
+                                        <!-- kvp cannot be data bound in two way mode-->
+                                        <Label Text="{Binding Value}"
+                                               Margin="7"
                                                Grid.Column="2"/>
                                     </Grid>
                                 </DataTemplate>
@@ -164,13 +166,15 @@
                                                     <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
 
-                                                <Entry Text="{Binding Name}"
+                                                <Entry Text="{Binding Name, Mode=OneWay}"
                                                        Grid.Column="0"
-                                                       FontSize="Subtitle"/>
+                                                       FontSize="Subtitle"
+                                                       IsEnabled="False"/>
                                                 <Picker ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:EditableChampionVM}}, Path=SkillTypes}"
                                                         HorizontalOptions="End"
                                                         Grid.Column="1"
-                                                        SelectedItem="{Binding Class, Mode=TwoWay}" />
+                                                        IsEnabled="False"
+                                                        SelectedItem="{Binding Type, Mode=OneWay}" />
                                             </Grid>
                                             <Editor Text="{Binding Description}"/>
                                         </VerticalStackLayout>

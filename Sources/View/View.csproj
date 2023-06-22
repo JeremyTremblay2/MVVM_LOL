@@ -82,5 +82,9 @@
 	  <None Remove="Resources\Images\Core\Classes\mage_class.webp" />
 	  <None Remove="Resources\Images\Core\Classes\assassin_class.webp" />
 	  <None Remove="Resources\Images\Core\Classes\support_class.webp" />
+	  <None Remove="Resources\Images\Core\Classes\unknown_class.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <BundleResource Include="Resources\Images\Core\Classes\unknown_class.png" />
 	</ItemGroup>
 </Project>

@@ -30,12 +30,6 @@ public class ChampionVM : BaseVM, ICloneable
     public string Name
     {
         get => Model.Name;
-        set
-        {
-            if (value.Equals(Model.Name)) return;
-            Model.Name = value;
-            OnPropertyChanged();
-        }
     }
 
     public string Icon
@@ -117,6 +111,7 @@ public class ChampionVM : BaseVM, ICloneable
         if (Model.Characteristics.ContainsKey(value.Item1))
         {
             RemoveCharacteristic(value.Item1);
+            characteristics.Remove(value.Item1);
         }
         Model.AddCharacteristics(value);
         characteristics.Add(value.Item1, value.Item2);
@@ -163,6 +158,8 @@ public class ChampionVM : BaseVM, ICloneable
         if (Model.Skills.Contains(skill.Model))
         {
             Model.RemoveSkill(skill.Model);
+            var skillToRemove = skillsVM.Where(s => s.Model.Equals(skill.Model)).FirstOrDefault();
+            skillsVM.Remove(skillToRemove);
         }
 
         Model.AddSkill(skill.Model);

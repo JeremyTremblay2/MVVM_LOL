@@ -25,7 +25,7 @@
                 <Label Text="Find by &lt;" />
                 <CollectionView x:Name="Champions"
                                 ItemsSource="{Binding ChampionManagerVM.ObservableChampionsVM}"
-                                SelectionMode="Single"
+                                SelectionMode="None"
                                 SelectionChangedCommand="{Binding Source={RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=NavToSelectChampionCommand}"
                                 SelectionChangedCommandParameter="{Binding .}">
                     <CollectionView.ItemTemplate>
@@ -38,7 +38,7 @@
                                                    CommandParameter="{Binding .}"
                                                    BackgroundColor="Red" />
                                         <SwipeItem Text="Edit"
-                                                   Command="{Binding Source={x:RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=NavToEditChampionCommand}"
+                                                   Command="{Binding Source={x:RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=NavigateToUpsertChampionCommand}"
                                                    CommandParameter="{Binding .}"
                                                    BackgroundColor="DarkGrey" />
                                     </SwipeItems>

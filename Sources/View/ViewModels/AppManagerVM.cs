@@ -3,6 +3,8 @@ using System.Windows.Input;
 using View.Pages;
 using ViewModel;
 using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Maui.Converters;
+using Model;
 
 namespace View.ViewModels
 {
@@ -57,6 +59,22 @@ namespace View.ViewModels
             await Navigation.PushModalAsync(new AddEditChampionPage(this, new EditableChampionVM(champion)));
         }
 
+        private async Task NavigateToUpsertChampion()
+        {
+            string result =
+                await (Application.Current as App)!.MainPage!
+                    .DisplayPromptAsync("New Champion", "Choose a name for your chmapion", cancel: "Cancel", accept: "Select", maxLength: 255, initialValue: "");
+
+            if (result == null) return;
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                await (Application.Current as App)!.MainPage!
+                    .DisplayAlert("Error", "You must choose a name not empty for your champion.", "OK");
+                return;
+            }
+            await Navigation.PushModalAsync(new AddEditChampionPage(this, new EditableChampionVM(result)));
+        }
+
         private async Task NavigateToSelectChampion(ChampionVM selectedChampion)
         {
             if (Navigation is null) return;
@@ -103,6 +121,27 @@ namespace View.ViewModels
         {
             if (Navigation is null) return;
             Navigation.PopModalAsync();
+        }
+
+        private async void LoadImage(string targetProperty)
+        {
+            var result = await FilePicker.PickAsync(new PickOptions { PickerTitle = "Pick Icon", FileTypes = FilePickerFileType.Images });
+            if (result == null)
+                return;
+
+            byte[] bytes;
+            using var stream = await result.OpenReadAsync();
+            var image = ImageSource.FromStream(() => stream);
+            var converter = new ByteArrayToImageSourceConverter();
+            bytes = converter.ConvertBackTo(image);
+            if (targetProperty.Equals("icon"))
+            {
+                //ChampionManagerVM.CurrentChampionVM.Icon = bytes;
+            }
+            else
+            {
+                //ChampionManagerVM.CurrentChampionVM.Image = bytes;
+            }
         }
     }
 }

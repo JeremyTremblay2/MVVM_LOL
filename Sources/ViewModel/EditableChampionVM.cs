@@ -94,6 +94,11 @@ namespace ViewModel
             );
         }
 
+        public EditableChampionVM(string name) : this(new ChampionVM(new Champion(name)))
+        {
+
+        }
+
         private void UpsertCharacteristic(Tuple<string, int> value)
         {
             ChampionVM.UpsertCharacteristic(value);
