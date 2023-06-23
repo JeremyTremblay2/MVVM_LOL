@@ -21,6 +21,8 @@ namespace View.ViewModels
         public ICommand NavigateBackAfterCancelingChampionEditCommand { get; private set; }
         public ICommand NavigateBackAfterUpsertingSkillCommand { get; private set; }
         public ICommand NavigateBackAfterCancelingSkillEditCommand { get; private set; }
+        public ICommand UploadChampionIconCommand { get; private set; }
+        public ICommand UploadChampionImageCommand { get; private set; }
 
         public AppManagerVM()
 		{
@@ -49,6 +51,16 @@ namespace View.ViewModels
 
             NavigateToAddSkillCommand = new Command<EditableChampionVM>(
                 execute: async (editedChampion) => await NavigateToAddSkill(editedChampion),
+                canExecute: editedChampion => ChampionManagerVM is not null && editedChampion is not null
+            );
+
+            UploadChampionIconCommand = new Command<EditableChampionVM>(
+                execute: async (editedChampion) => await UploadChampionIcon(editedChampion),
+                canExecute: editedChampion => ChampionManagerVM is not null && editedChampion is not null
+            );
+
+            UploadChampionImageCommand = new Command<EditableChampionVM>(
+                execute: async (editedChampion) => await UploadChampionImage(editedChampion),
                 canExecute: editedChampion => ChampionManagerVM is not null && editedChampion is not null
             );
         }
@@ -123,25 +135,29 @@ namespace View.ViewModels
             Navigation.PopModalAsync();
         }
 
-        private async void LoadImage(string targetProperty)
+        private async Task UploadChampionIcon(EditableChampionVM editedChampion)
+        {
+            var bytes = await LoadImage();
+            editedChampion.ChampionVM.Icon = Convert.ToBase64String(bytes);
+        }
+        
+        private async Task UploadChampionImage(EditableChampionVM editedChampion)
+        {
+            var bytes = await LoadImage();
+            editedChampion.ChampionVM.Image = Convert.ToBase64String(bytes);
+        }
+
+        private async Task<byte[]> LoadImage()
         {
             var result = await FilePicker.PickAsync(new PickOptions { PickerTitle = "Pick Icon", FileTypes = FilePickerFileType.Images });
-            if (result == null)
-                return;
+            if (result is null) return null;
 
             byte[] bytes;
             using var stream = await result.OpenReadAsync();
             var image = ImageSource.FromStream(() => stream);
             var converter = new ByteArrayToImageSourceConverter();
             bytes = converter.ConvertBackTo(image);
-            if (targetProperty.Equals("icon"))
-            {
-                //ChampionManagerVM.CurrentChampionVM.Icon = bytes;
-            }
-            else
-            {
-                //ChampionManagerVM.CurrentChampionVM.Image = bytes;
-            }
+            return bytes;
         }
     }
 }
