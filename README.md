@@ -1,4 +1,4 @@
-<h1 align="center">🏆 Odin 📝</h1>
+<h1 align="center">🏆 MVVM LeagueOfLegends 📝</h1>
 
 The goal of MVVM_LOL is to propose a multiplateform application allowing the user to see information on the characters of the famous game League Of Legends and edit their information.
 
