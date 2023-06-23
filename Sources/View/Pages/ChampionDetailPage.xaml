@@ -10,6 +10,7 @@
 
     <ContentPage.Resources>
         <conv:Base64ToImageSourceConverter x:Key="Base64Converter"/>
+        <conv:ChampionClassToImageConverter x:Key="ClassConverter"/>
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
@@ -37,7 +38,7 @@
                            VerticalOptions="Start"
                            VerticalTextAlignment="Start"
                            Grid.Row="0"/>
-                    <Image Source="{Binding Path=Icon, Converter={StaticResource Base64Converter}}"
+                    <Image Source="{Binding Path=Class, Converter={StaticResource ClassConverter}}"
                            HeightRequest="36"
                            WidthRequest="36"
                            HorizontalOptions="End"

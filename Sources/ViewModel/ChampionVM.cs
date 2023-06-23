@@ -87,6 +87,16 @@ public class ChampionVM : BaseVM, ICloneable
 
     public ObservableDictionary<string, int> characteristics;
 
+    public static Dictionary<string, string> ClassesToStringImages = new Dictionary<string, string>
+    {
+        { ChampionClass.Assassin.ToString(), "assassin_class" },
+        { ChampionClass.Fighter.ToString(), "fighter_class" },
+        { ChampionClass.Mage.ToString(), "mage_class" },
+        { ChampionClass.Marksman.ToString(), "marksman_class" },
+        { ChampionClass.Support.ToString(), "support_class" },
+        { ChampionClass.Tank.ToString(), "tank_class" },
+    };
+
     public ChampionVM(Champion model)
     {
         Model = model ?? throw new ArgumentNullException(nameof(model), "The parameter given cannot be null.");

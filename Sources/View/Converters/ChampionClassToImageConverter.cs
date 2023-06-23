@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using ViewModel;
 
 namespace View.Converters
 {
@@ -7,12 +8,10 @@ namespace View.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch (value.ToString())
-            {
-                case "Unknown":
-                    return null;
+            if (value == null || !ChampionVM.ClassesToStringImages.ContainsKey(value.ToString())) {
+                return null;
             }
-            return null;
+            return ChampionVM.ClassesToStringImages[value.ToString()];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

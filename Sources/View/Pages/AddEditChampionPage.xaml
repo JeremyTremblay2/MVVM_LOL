@@ -11,6 +11,7 @@
     <ContentPage.Resources>
         <conv:Base64ToImageSourceConverter x:Key="Base64Converter"/>
         <conv:StringToStringIntTupleConverter x:Key="TupleConverter"/>
+        <conv:ChampionClassToImageConverter x:Key="ClassConverter"/>
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
@@ -79,10 +80,36 @@
                            Grid.Row="4"
                            Grid.Column="0"
                            VerticalTextAlignment="Center"/>
-                    <Picker ItemsSource="{Binding Classes}"
-                            Grid.Row="4"
-                            Grid.Column="1"
-                            SelectedItem="{Binding ChampionVM.Class, Mode=TwoWay}" />
+
+                    <CollectionView ItemsSource="{Binding Classes}"
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding ChampionVM.Class, Mode=TwoWay}"
+                                Margin="0, 10, 0, 20">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical"
+                                             Span="3"
+                                             HorizontalItemSpacing="2"
+                                             VerticalItemSpacing="5"/>
+
+                        </CollectionView.ItemsLayout>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <VerticalStackLayout HorizontalOptions="CenterAndExpand">
+                                    <Image Source="{Binding ., Converter={StaticResource ClassConverter}}"
+                                            WidthRequest="40"
+                                            HeightRequest="40"/>
+                                    <Label Text="{Binding .}"
+                                            FontSize="Subtitle"
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Center"/>
+
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
                     <!-- Characteristics-->
                     <Label Text="Characteristics"

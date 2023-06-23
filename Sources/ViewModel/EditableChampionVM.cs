@@ -47,7 +47,7 @@ namespace ViewModel
         private static readonly ReadOnlyCollection<string> types = new(Enum.GetNames(typeof(SkillType)).ToList());
         public ReadOnlyCollection<string> SkillTypes => types;
 
-        private static readonly ReadOnlyCollection<string> classes = new(Enum.GetNames(typeof(ChampionClass)).ToList());
+        private static readonly ReadOnlyCollection<string> classes = new(Enum.GetNames(typeof(ChampionClass)).Skip(1).ToList());
         public ReadOnlyCollection<string> Classes => classes;
 
         public EditableChampionVM(ChampionVM championVM)
