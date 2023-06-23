@@ -58,6 +58,7 @@
                            Grid.Row="1"
                            WidthRequest="60"
                            HeightRequest="60"
+                           BackgroundColor="{StaticResource Primary}"
                            Grid.Column="1"
                            Command="{Binding AppManagerVM.UploadChampionIconCommand}"
                            CommandParameter="{Binding ChampionVM}"/>
@@ -69,6 +70,7 @@
                     <ImageButton Source="{Binding ChampionVM.ChampionVM.Image, Converter={StaticResource Base64Converter}}" 
                            Grid.Row="2"
                            Grid.Column="1"
+                           BackgroundColor="{StaticResource Primary}"
                            Command="{Binding AppManagerVM.UploadChampionImageCommand}"
                            CommandParameter="{Binding ChampionVM}"/>
 

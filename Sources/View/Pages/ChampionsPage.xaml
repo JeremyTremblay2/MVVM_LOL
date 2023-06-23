@@ -11,7 +11,7 @@
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" 
-                     Command="{Binding NavToAddChampionCommand}"/>
+                     Command="{Binding NavigateToUpsertChampionCommand}"/>
     </ContentPage.ToolbarItems>
 
     <Grid>
@@ -25,16 +25,14 @@
                 <Label Text="Find by &lt;" />
                 <CollectionView x:Name="Champions"
                                 ItemsSource="{Binding ChampionManagerVM.ObservableChampionsVM}"
-                                SelectionMode="None"
-                                SelectionChangedCommand="{Binding Source={RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=NavToSelectChampionCommand}"
-                                SelectionChangedCommandParameter="{Binding .}">
+                                SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="vm:ChampionVM">
                             <SwipeView>
                                 <SwipeView.RightItems>
                                     <SwipeItems>
                                         <SwipeItem Text="Delete"
-                                                   Command="{Binding Source={x:RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=ChampionManagerVM.DeleteChampionCommand}"
+                                                   Command="{Binding Source={x:RelativeSource AncestorType={x:Type view:ViewModels.AppManagerVM}}, Path=NavigateToDeleteChampionCommand}"
                                                    CommandParameter="{Binding .}"
                                                    BackgroundColor="Red" />
                                         <SwipeItem Text="Edit"
