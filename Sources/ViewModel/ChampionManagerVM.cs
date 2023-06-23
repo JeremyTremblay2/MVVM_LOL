@@ -93,6 +93,8 @@ namespace ViewModel
         public ICommand InitializeDataCommand { get; private set; }
         public ICommand NextPageCommand { get; private set; }
         public ICommand PreviousPageCommand { get; private set; }
+        public ICommand UpsertChampionCommand { get; private set; }
+        public ICommand DeleteChampionCommand { get; private set; }
 
         public ChampionManagerVM(IDataManager dataManager)
 		{
@@ -124,9 +126,19 @@ namespace ViewModel
                 },
                 canExecute: () => DataManager is not null
             );
+
+            UpsertChampionCommand = new Command<EditableChampionVM>(
+                execute: async (editableChampion) => await UpsertChampion(editableChampion),
+                canExecute: editableChampion => dataManager is not null && editableChampion is not null
+            );
+
+            DeleteChampionCommand = new Command<ChampionVM>(
+                execute: async (championVM) => await DeleteChampion(championVM),
+                canExecute: championVM => dataManager is not null && championVM is not null
+            );
         }
 
-		public async Task LoadChampions(int index, int count)
+        public async Task LoadChampions(int index, int count)
 		{
             championsVM.Clear();
 
@@ -151,6 +163,37 @@ namespace ViewModel
         {
             Index = Math.Max(1, Index - 1);
             LoadChampionsCommand.Execute(null);
+        }
+
+        private async Task UpsertChampion(EditableChampionVM editableChampion)
+        {
+            Champion champion = await GetChampionByName(editableChampion.ChampionVM.Name);
+
+            if (champion is not null)
+            {
+                await DataManager.ChampionsMgr.UpdateItem(champion, editableChampion.ChampionVM.Model);
+            }
+            else
+            {
+                if (await DataManager.ChampionsMgr.AddItem(editableChampion.ChampionVM.Model) is not null)
+                    await UpdateTotalItemCount();
+            }
+            LoadChampionsCommand.Execute(null);
+        }
+
+        private async Task DeleteChampion(ChampionVM championVM)
+        {
+            if (championVM is not null && await DataManager.ChampionsMgr.DeleteItem(championVM.Model))
+            {
+                await UpdateTotalItemCount();
+                LoadChampionsCommand.Execute(null);
+            }
+        }
+
+        private async Task<Champion> GetChampionByName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name) || dataManager is null) return null;
+            return (await DataManager.ChampionsMgr.GetItemsByName(name, 0, 1)).FirstOrDefault();
         }
     }
 }

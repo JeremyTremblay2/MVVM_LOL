@@ -5,19 +5,20 @@
              xmlns:conv="clr-namespace:View.Converters"
              xmlns:view="clr-namespace:View;assembly=View"
              xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
-             x:Name="ThisChampionPage"
+             x:Name="root"
              Title="{Binding Name}">
 
     <ContentPage.Resources>
         <conv:Base64ToImageSourceConverter x:Key="Base64Converter"/>
+        <conv:ChampionClassToImageConverter x:Key="ClassConverter"/>
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Supprimer" 
+        <ToolbarItem Text="Delete" 
                      Command="{Binding AppManagerVM.NavToAllChampionsAfterDeletingCommand}"
                      CommandParameter="{Binding .}" />
-        <ToolbarItem Text="Modifier" 
-                     Command="{Binding Source={x:Reference ThisChampionPage}, Path=AppManagerVM.NavToUpdateChampionCommand}"
+        <ToolbarItem Text="Edit" 
+                     Command="{Binding Source={x:Reference root}, Path=AppManagerVM.NavigateToUpsertChampionCommand}"
                      CommandParameter="{Binding .}" />
     </ContentPage.ToolbarItems>
 
@@ -37,7 +38,7 @@
                            VerticalOptions="Start"
                            VerticalTextAlignment="Start"
                            Grid.Row="0"/>
-                    <Image Source="{Binding Path=Icon, Converter={StaticResource Base64Converter}}"
+                    <Image Source="{Binding Path=Class, Converter={StaticResource ClassConverter}}"
                            HeightRequest="36"
                            WidthRequest="36"
                            HorizontalOptions="End"

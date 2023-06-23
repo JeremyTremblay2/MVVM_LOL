@@ -9,7 +9,7 @@ public class Champion : IEquatable<Champion>
     public string Name
     {
         get => name;
-        set
+        private init
         {
             if (string.IsNullOrWhiteSpace(value))
             {
@@ -19,7 +19,7 @@ public class Champion : IEquatable<Champion>
             name = value;
         }
     }
-    private string name = null!;
+    private readonly string name = null!;
 
     public string Bio
     {

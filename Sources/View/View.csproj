@@ -56,6 +56,13 @@
 	  <MauiImage Include="Resources\Images\Icons\ic_lol.svg" />
 	  <MauiImage Include="Resources\Images\Icons\ic_sword.png" />
 	  <MauiImage Include="Resources\Images\Core\lol_logo.png" />
+	  <MauiImage Include="Resources\Images\Core\Classes\assassin_class.webp" />
+	  <MauiImage Include="Resources\Images\Core\Classes\fighter_class.webp" />
+	  <MauiImage Include="Resources\Images\Core\Classes\mage_class.webp" />
+	  <MauiImage Include="Resources\Images\Core\Classes\marksman_class.webp" />
+	  <MauiImage Include="Resources\Images\Core\Classes\support_class.webp" />
+	  <MauiImage Include="Resources\Images\Core\Classes\tank_class.webp" />
+	  <MauiImage Include="Resources\Images\Icons\trash.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ViewModel\ViewModel.csproj" />
@@ -64,5 +71,20 @@
 	<ItemGroup>
 	  <Folder Include="Converters\" />
 	  <Folder Include="ViewModels\" />
+	  <Folder Include="Resources\Images\Core\Classes\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Resources\Images\Icons\trash.png" />
+	  <None Remove="Resources\Images\Core\Classes\" />
+	  <None Remove="Resources\Images\Core\Classes\marksman_class.webp" />
+	  <None Remove="Resources\Images\Core\Classes\tank_class.webp" />
+	  <None Remove="Resources\Images\Core\Classes\fighter_class.webp" />
+	  <None Remove="Resources\Images\Core\Classes\mage_class.webp" />
+	  <None Remove="Resources\Images\Core\Classes\assassin_class.webp" />
+	  <None Remove="Resources\Images\Core\Classes\support_class.webp" />
+	  <None Remove="Resources\Images\Core\Classes\unknown_class.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <BundleResource Include="Resources\Images\Core\Classes\unknown_class.png" />
 	</ItemGroup>
 </Project>

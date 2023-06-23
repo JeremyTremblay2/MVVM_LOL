@@ -3,15 +3,16 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Model;
 using Utils;
+using VMToolkit;
 
 namespace ViewModel;
 
-public class ChampionVM : INotifyPropertyChanged
+public class ChampionVM : BaseVM, ICloneable
 {
-    private Champion Model
+    public Champion Model
     {
         get => model;
-        set
+        private set
         {
             if (value.Equals(model)) return;
             this.model = value;
@@ -29,12 +30,6 @@ public class ChampionVM : INotifyPropertyChanged
     public string Name
     {
         get => Model.Name;
-        set
-        {
-            if (value.Equals(Model.Name)) return;
-            Model.Name = value;
-            OnPropertyChanged();
-        }
     }
 
     public string Icon
@@ -92,7 +87,15 @@ public class ChampionVM : INotifyPropertyChanged
 
     public ObservableDictionary<string, int> characteristics;
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public static Dictionary<string, string> ClassesToStringImages = new Dictionary<string, string>
+    {
+        { ChampionClass.Assassin.ToString(), "assassin_class" },
+        { ChampionClass.Fighter.ToString(), "fighter_class" },
+        { ChampionClass.Mage.ToString(), "mage_class" },
+        { ChampionClass.Marksman.ToString(), "marksman_class" },
+        { ChampionClass.Support.ToString(), "support_class" },
+        { ChampionClass.Tank.ToString(), "tank_class" },
+    };
 
     public ChampionVM(Champion model)
     {
@@ -101,7 +104,7 @@ public class ChampionVM : INotifyPropertyChanged
         SkillsVM = new ReadOnlyObservableCollection<SkillVM>(skillsVM);
         characteristics = new ObservableDictionary<string, int>();
         CharacteristicsVM = new ReadOnlyObservableDictionary<string, int>(characteristics);
-        AddCharacteristics(Model.Characteristics.Select(c => new Tuple<string, int>(c.Key, c.Value)).ToArray());
+        UpsertCharacteristics(Model.Characteristics.Select(c => new Tuple<string, int>(c.Key, c.Value)).ToArray());
         UpsertSkills(Model.Skills.Select(s => new SkillVM(s)));
     }
 
@@ -109,10 +112,7 @@ public class ChampionVM : INotifyPropertyChanged
     {
     }
 
-    public void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-    public void AddCharacteristic(Tuple<string, int> value)
+    public void UpsertCharacteristic(Tuple<string, int> value)
     {
         if (string.IsNullOrWhiteSpace(value.Item1))
         {
@@ -121,16 +121,17 @@ public class ChampionVM : INotifyPropertyChanged
         if (Model.Characteristics.ContainsKey(value.Item1))
         {
             RemoveCharacteristic(value.Item1);
+            characteristics.Remove(value.Item1);
         }
         Model.AddCharacteristics(value);
         characteristics.Add(value.Item1, value.Item2);
     }
 
-    public void AddCharacteristics(Tuple<string, int>[] values)
+    public void UpsertCharacteristics(Tuple<string, int>[] values)
     {
         foreach (var value in values)
         {
-            AddCharacteristic(value);
+            UpsertCharacteristic(value);
         }
     }
 
@@ -159,6 +160,16 @@ public class ChampionVM : INotifyPropertyChanged
         if (skill is null)
         {
             throw new ArgumentNullException(nameof(skill), "The skill given in parameter cannot be null.");
+        }
+        if (skill.Type is null || string.IsNullOrWhiteSpace(skill.Name))
+        {
+            throw new ArgumentException("The skill type or the name cannot be empty");
+        }
+        if (Model.Skills.Contains(skill.Model))
+        {
+            Model.RemoveSkill(skill.Model);
+            var skillToRemove = skillsVM.Where(s => s.Model.Equals(skill.Model)).FirstOrDefault();
+            skillsVM.Remove(skillToRemove);
         }
 
         Model.AddSkill(skill.Model);
@@ -191,5 +202,23 @@ public class ChampionVM : INotifyPropertyChanged
             Model.RemoveSkill(skill);
             skillsVM.Remove(skillVM);
         }
+    }
+
+    public object Clone()
+    {
+        Champion model = new Champion(Model.Name)
+        {
+            Icon = Model.Icon,
+            Bio = Model.Bio,
+            Class = Model.Class,
+            Image = Model.Image,
+        };
+
+        var championVM = new ChampionVM(model);
+        championVM.UpsertCharacteristics(Model.Characteristics.Select(c => new Tuple<string, int>(c.Key, c.Value)).ToArray());
+        championVM.UpsertSkills(Model.Skills.Select(s => new SkillVM(s)));
+        // Add skin management here.
+
+        return championVM;
     }
 }

@@ -24,26 +24,11 @@ namespace ViewModel
         public string Name
         {
             get => Model.Name;
-            set
-            {
-                if (value.Equals(Model.Name)) return;
-                Model.Name = value;
-                OnPropertyChanged();
-            }
         }
 
         public string Type
         {
             get => Model.Type.ToString();
-            set
-            {
-                if (value.Equals(Model.Type.ToString())) return;
-                if (Enum.TryParse(value, out SkillType skillValue))
-                {
-                    Model.Type = skillValue;
-                    OnPropertyChanged();
-                }
-            }
         }
 
         public string Description
@@ -61,6 +46,10 @@ namespace ViewModel
         {
             Model = model ?? throw new ArgumentNullException(nameof(model), "The given parameter cannot be null.");
         }
-	}
+
+        public SkillVM() : this(new Skill("Skill", SkillType.Unknown))
+        {
+        }
+    }
 }
 

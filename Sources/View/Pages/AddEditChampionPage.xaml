@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="View.Pages.AddEditChampionPage"
+             xmlns:conv="clr-namespace:View.Converters"
+             xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
+             xmlns:view="clr-namespace:View;assembly=View"
+             Title="Edit Champion"
+             x:Name="root">
+
+    <ContentPage.Resources>
+        <conv:Base64ToImageSourceConverter x:Key="Base64Converter"/>
+        <conv:StringToStringIntTupleConverter x:Key="TupleConverter"/>
+        <conv:ChampionClassToImageConverter x:Key="ClassConverter"/>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Cancel" 
+                     Command="{Binding AppManagerVM.NavigateBackAfterCancelingChampionEditCommand}"
+                     CommandParameter="{Binding .}" />
+        <ToolbarItem Text="Save" 
+                     Command="{Binding Path=AppManagerVM.NavigateBackAfterUpsertingChampionCommand}"
+                     CommandParameter="{Binding .}" />
+    </ContentPage.ToolbarItems>
+
+    <Grid RowDefinitions="*, Auto">
+        <ScrollView>
+            <VerticalStackLayout 
+                                 Margin="10, 10, 10, 20">
+                <Grid ColumnSpacing="10" RowSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+            
+                    <Label Text="Name"
+                           Grid.Row="0"
+                           Grid.Column="0"
+                           VerticalTextAlignment="Center"/>
+                    <Label Text="{Binding ChampionVM.ChampionVM.Name}"
+                           Grid.Row="0"
+                           Grid.Column="1"/>
+
+                    <Label Text="Icon"
+                           Grid.Row="1"
+                           Grid.Column="0"
+                           VerticalTextAlignment="Center"/>
+                    <ImageButton Source="{Binding ChampionVM.ChampionVM.Icon, Converter={StaticResource Base64Converter}}" 
+                           Grid.Row="1"
+                           WidthRequest="60"
+                           HeightRequest="60"
+                           Grid.Column="1"
+                           Command="{Binding AppManagerVM.UploadChampionIconCommand}"
+                           CommandParameter="{Binding ChampionVM}"/>
+
+                    <Label Text="Image"
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           VerticalTextAlignment="Center"/>
+                    <ImageButton Source="{Binding ChampionVM.ChampionVM.Image, Converter={StaticResource Base64Converter}}" 
+                           Grid.Row="2"
+                           Grid.Column="1"
+                           Command="{Binding AppManagerVM.UploadChampionImageCommand}"
+                           CommandParameter="{Binding ChampionVM}"/>
+
+                    <Label Text="Bio"
+                           Grid.Row="3"
+                           Grid.Column="0"
+                           VerticalTextAlignment="Center"/>
+                    <Editor Text="{Binding ChampionVM.ChampionVM.Bio}"
+                            Grid.Row="3"
+                            Grid.Column="1"/>
+
+                    <Label Text="Class"
+                           Grid.Row="4"
+                           Grid.Column="0"
+                           VerticalTextAlignment="Center"/>
+
+                    <CollectionView ItemsSource="{Binding ChampionVM.Classes}"
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding ChampionVM.ChampionVM.Class, Mode=TwoWay}"
+                                Margin="0, 10, 0, 20">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical"
+                                             Span="3"
+                                             HorizontalItemSpacing="2"
+                                             VerticalItemSpacing="5"/>
+
+                        </CollectionView.ItemsLayout>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <VerticalStackLayout HorizontalOptions="CenterAndExpand">
+                                    <Image Source="{Binding ., Converter={StaticResource ClassConverter}}"
+                                            WidthRequest="40"
+                                            HeightRequest="40"/>
+                                    <Label Text="{Binding .}"
+                                            FontSize="Subtitle"
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Center"/>
+
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- Characteristics-->
+                    <Label Text="Characteristics"
+                           Grid.Row="5"
+                           Grid.Column="0"
+                           VerticalTextAlignment="Center"/>
+                    <VerticalStackLayout Grid.Row="5" Grid.Column="1" BindingContext="{Binding ChampionVM}">
+                        <CollectionView SelectionMode="None"
+                                        ItemsSource="{Binding ChampionVM.CharacteristicsVM}"
+                                        VerticalScrollBarVisibility="Never">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="auto, *, auto" Margin="0">
+                                        <ImageButton Source="trash.png"
+                                                WidthRequest="20"
+                                                HeightRequest="20"
+                                                Grid.Column="0"
+                                                Margin="0, 0, 10, 0"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EditableChampionVM}}, Path=RemoveCharacteristicCommand}"
+                                                CommandParameter="{Binding Key}" />
+                                        <Label Text="{Binding Key}"
+                                               Grid.Column="1"
+                                               Margin="0, 0, 10, 0"
+                                               VerticalOptions="Center"/>
+                                        <!-- kvp cannot be data bound in two way mode-->
+                                        <Label Text="{Binding Value}"
+                                               Margin="7"
+                                               Grid.Column="2"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <!-- Add Characteristic button-->
+                        <Grid ColumnDefinitions="*, Auto, Auto"
+                              VerticalOptions="Center"
+                              Margin="0, 10, 0, 20">
+                            <Entry Placeholder="Name"
+                                   x:Name="CharacteristicLabel"/>
+                            <Entry Placeholder="Value"
+                                   Grid.Column="1"
+                                   Margin="10, 0, 10, 0"
+                                   x:Name="CharacteristicValue"/>
+                            <Button Text="+"
+                                    CornerRadius="25"
+                                    Grid.Column="2"
+                                    Command="{Binding UpsertCharacteristicCommand}">
+                                <Button.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource TupleConverter}">
+                                        <Binding Path="Text" Source="{x:Reference CharacteristicLabel}" />
+                                        <Binding Path="Text" Source="{x:Reference CharacteristicValue}" />
+                                    </MultiBinding>
+                                </Button.CommandParameter>
+                            </Button>
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Skills-->
+                    <Label Text="Skills"
+                           Grid.Row="6"
+                           Grid.Column="0"
+                           VerticalTextAlignment="Center"/>
+                    <VerticalStackLayout Grid.Row="6" Grid.Column="1" BindingContext="{Binding ChampionVM}">
+                        <CollectionView SelectionMode="None"
+                                        ItemsSource="{Binding ChampionVM.SkillsVM}"
+                                        VerticalScrollBarVisibility="Never">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="Auto, *" Margin="0, 10, 0, 0">
+                                        <ImageButton Source="trash.png"
+                                                WidthRequest="20"
+                                                HeightRequest="20"
+                                                VerticalOptions="Center"
+                                                Margin="0, 0, 10, 0"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EditableChampionVM}}, Path=RemoveSkillCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        <VerticalStackLayout Grid.Column="1">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Entry Text="{Binding Name, Mode=OneWay}"
+                                                       Grid.Column="0"
+                                                       FontSize="Subtitle"
+                                                       IsEnabled="False"/>
+                                                <Picker ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:EditableChampionVM}}, Path=SkillTypes}"
+                                                        HorizontalOptions="End"
+                                                        Grid.Column="1"
+                                                        IsEnabled="False"
+                                                        SelectedItem="{Binding Type, Mode=OneWay}" />
+                                            </Grid>
+                                            <Editor Text="{Binding Description}"/>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button Text="Add Skill"
+                                Margin="0, 10, 0, 0"
+                                Command="{Binding Source={x:Reference root}, Path=AppManagerVM.NavigateToAddSkillCommand}"
+                                CommandParameter="{Binding .}"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Grid ColumnDefinitions="*, *"
+              BackgroundColor="#00FFFFFF"
+              Grid.Row="1"
+              Margin="10, 0, 10, 10">
+            <Button Text="Cancel" 
+                    Command="{Binding AppManagerVM.NavigateBackAfterCancelingChampionEditCommand}"
+                    CommandParameter="{Binding .}"
+                    Grid.Column="0"
+                    BackgroundColor="Red"
+                    Margin="10, 0, 20, 0"/>
+            <Button Text="Save" 
+                    Command="{Binding Path=AppManagerVM.NavigateBackAfterUpsertingChampionCommand}"
+                    CommandParameter="{Binding ChampionVM}"
+                    Grid.Column="1"
+                    BackgroundColor="Green"
+                    Margin="20, 0, 10, 0"/>
+        </Grid>
+    </Grid>
+</ContentPage>

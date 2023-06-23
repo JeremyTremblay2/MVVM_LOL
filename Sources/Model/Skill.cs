@@ -4,12 +4,12 @@ namespace Model
 {
 	public class Skill : IEquatable<Skill>
 	{
-		public SkillType Type { get; set; }
+		public SkillType Type { get; private set; }
 
 		public string Name
 		{
 			get => name;
-			set
+			private init
 			{
 				if (string.IsNullOrWhiteSpace(value))
 				{
@@ -18,7 +18,7 @@ namespace Model
 				name = value;
 			}
 		}
-		private string name = null!;
+		private readonly string name = null!;
 
 		public string Description
 		{
