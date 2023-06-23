@@ -1,20 +1,20 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using System;
+using System.Collections.ObjectModel;
+using VMToolkit;
 
 namespace VMToolkit;
 
-public  class BaseVM : INotifyPropertyChanged //<T> where T : IEquatable<T>, INotifyPropertyChanged
+public  class BaseVM : INotifyPropertyChanged 
 {
-    //protected T Model { get; private set; }
-
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    /*public BaseVM(T model)
-    {
-        Model = model;
-    }*/
-
-    public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+    protected void UpdateCommand(ICommand command)
+        => (command as Command)?.ChangeCanExecute();
 }

@@ -7,9 +7,9 @@ using VMToolkit;
 
 namespace ViewModel;
 
-public class ChampionVM : BaseVM, ICloneable
+public class ChampionVM : GenericBaseVM<Champion>, ICloneable
 {
-    public Champion Model
+    protected internal new Champion Model
     {
         get => model;
         private set
@@ -97,9 +97,9 @@ public class ChampionVM : BaseVM, ICloneable
         { ChampionClass.Tank.ToString(), "tank_class" },
     };
 
-    public ChampionVM(Champion model)
+    public ChampionVM(Champion model) : base(model)
     {
-        Model = model ?? throw new ArgumentNullException(nameof(model), "The parameter given cannot be null.");
+        this.model = model ?? throw new ArgumentNullException(nameof(model), "The parameter given cannot be null.");
         skillsVM = new ObservableCollection<SkillVM>();
         SkillsVM = new ReadOnlyObservableCollection<SkillVM>(skillsVM);
         characteristics = new ObservableDictionary<string, int>();
