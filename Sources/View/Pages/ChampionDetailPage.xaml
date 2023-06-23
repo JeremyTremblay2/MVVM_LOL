@@ -15,7 +15,7 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Delete" 
-                     Command="{Binding AppManagerVM.NavToAllChampionsAfterDeletingCommand}"
+                     Command="{Binding Source={x:Reference root}, Path=AppManagerVM.NavigateBackAfterDeletingChampionCommand}"
                      CommandParameter="{Binding .}" />
         <ToolbarItem Text="Edit" 
                      Command="{Binding Source={x:Reference root}, Path=AppManagerVM.NavigateToUpsertChampionCommand}"

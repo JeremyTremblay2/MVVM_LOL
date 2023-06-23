@@ -16,10 +16,10 @@ namespace ViewModel
             {
                 if (dataManager is not null && dataManager.Equals(value)) return;
                 dataManager = value;
-                (LoadChampionsCommand as Command)?.ChangeCanExecute();
-                (InitializeDataCommand as Command)?.ChangeCanExecute();
-                (NextPageCommand as Command)?.ChangeCanExecute();
-                (PreviousPageCommand as Command)?.ChangeCanExecute();
+                UpdateCommand(LoadChampionsCommand);
+                UpdateCommand(InitializeDataCommand);
+                UpdateCommand(NextPageCommand);
+                UpdateCommand(PreviousPageCommand);
             }
         }
         private IDataManager dataManager;
@@ -36,8 +36,8 @@ namespace ViewModel
                 if (index == value) return;
                 index = value;
                 OnPropertyChanged(nameof(Index));
-                (NextPageCommand as Command)?.ChangeCanExecute();
-                (PreviousPageCommand as Command)?.ChangeCanExecute();
+                UpdateCommand(NextPageCommand);
+                UpdateCommand(PreviousPageCommand);
             }
         }
         private int index = 1;
@@ -50,8 +50,8 @@ namespace ViewModel
                 if (count == value) return;
                 count = value;
                 OnPropertyChanged();
-                (NextPageCommand as Command)?.ChangeCanExecute();
-                (PreviousPageCommand as Command)?.ChangeCanExecute();
+                UpdateCommand(NextPageCommand);
+                UpdateCommand(PreviousPageCommand);
             }
         }
         private int count = 5;
@@ -80,7 +80,7 @@ namespace ViewModel
                 }
                 totalItemCount = value;
                 OnPropertyChanged();
-                (NextPageCommand as Command)?.ChangeCanExecute();
+                UpdateCommand(NextPageCommand);
             }
         }
         private int totalItemCount;

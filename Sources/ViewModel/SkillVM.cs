@@ -4,9 +4,9 @@ using VMToolkit;
 
 namespace ViewModel
 {
-	public class SkillVM : BaseVM
+	public class SkillVM : GenericBaseVM<Skill>
 	{
-        public Skill Model
+        protected internal new Skill Model
         {
             get => model;
             private set
@@ -42,9 +42,9 @@ namespace ViewModel
             }
         }
 
-        public SkillVM(Skill model)
+        public SkillVM(Skill model) : base(model)
         {
-            Model = model ?? throw new ArgumentNullException(nameof(model), "The given parameter cannot be null.");
+            this.model = model ?? throw new ArgumentNullException(nameof(model), "The parameter given cannot be null.");
         }
 
         public SkillVM() : this(new Skill("Skill", SkillType.Unknown))

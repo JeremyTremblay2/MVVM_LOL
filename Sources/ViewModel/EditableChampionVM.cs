@@ -2,10 +2,11 @@
 using Model;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using VMToolkit;
 
 namespace ViewModel
 {
-	public class EditableChampionVM
+	public class EditableChampionVM : BaseVM
 	{
         public ChampionVM ChampionVM
         {
@@ -14,12 +15,12 @@ namespace ViewModel
             {
                 if (championVM is not null && championVM.Equals(value)) return;
                 championVM = value;
-                (UpsertCharacteristicCommand as Command)?.ChangeCanExecute();
-                (RemoveCharacteristicCommand as Command)?.ChangeCanExecute();
-                (UpsertSkillCommand as Command)?.ChangeCanExecute();
-                (RemoveSkillCommand as Command)?.ChangeCanExecute();
-                (UpsertIconCommand as Command)?.ChangeCanExecute();
-                (UpsertImageCommand as Command)?.ChangeCanExecute();
+                UpdateCommand(UpsertCharacteristicCommand);
+                UpdateCommand(RemoveCharacteristicCommand);
+                UpdateCommand(UpsertSkillCommand);
+                UpdateCommand(RemoveSkillCommand);
+                UpdateCommand(UpsertIconCommand);
+                UpdateCommand(UpsertImageCommand);
             }
         }
         private ChampionVM championVM;
@@ -31,7 +32,7 @@ namespace ViewModel
             {
                 if (editedSkill is not null && editedSkill.Equals(value)) return;
                 editedSkill = value;
-                (UpsertSkillCommand as Command)?.ChangeCanExecute();
+                UpdateCommand(UpsertSkillCommand);
             }
         }
         private SkillVM editedSkill;
@@ -102,13 +103,13 @@ namespace ViewModel
         private void UpsertCharacteristic(Tuple<string, int> value)
         {
             ChampionVM.UpsertCharacteristic(value);
-            (UpsertCharacteristicCommand as Command).ChangeCanExecute();
+            UpdateCommand(UpsertCharacteristicCommand);
         }
 
         private void RemoveCharacteristic(string key)
         {
             ChampionVM.RemoveCharacteristic(key);
-            (UpsertCharacteristicCommand as Command).ChangeCanExecute();
+            UpdateCommand(UpsertCharacteristicCommand);
         }
 
         private void UpsertIcon(byte[] image)
