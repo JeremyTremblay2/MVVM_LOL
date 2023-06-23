@@ -99,7 +99,6 @@ The model-dependent view model is responsible for providing properties that can 
 By employing both types of view models, the MVVM Toolkit demonstrates a comprehensive implementation of the MVVM pattern, enabling efficient navigation and seamless data binding within the application.
 
 ```mermaid
-
 classDiagram
 
 class View
@@ -121,7 +120,6 @@ There is three differents projets. The model, the view, and the view model. But 
 The final class diagram of this application looks like something like that (I don't have put all the methods and the wrapped properties purposely because the diagram would be too big):
 
 ```mermaid
-
 classDiagram
 
 class AppManagerVM {
